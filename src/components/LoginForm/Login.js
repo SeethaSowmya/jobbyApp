@@ -32,7 +32,7 @@ class LoginForm extends Component {
     const data = await response.json()
     console.log(data)
     if (response.ok === true) {
-      this.onSuccess(data)
+      this.onSuccess(data.jwt_token)
     } else {
       this.onFailure(data.error_msg)
     }

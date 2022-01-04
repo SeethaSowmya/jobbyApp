@@ -2,8 +2,30 @@
     padding:20px;
 }
 .leftContainer{
-    width:30%;
+    width:25%;
+    padding-top: 10px;
 }
 .rightContainer{
     width: 60%;
+}
+.profileData{
+    background-image: url("https://assets.ccbp.in/frontend/react-js/profile-bg.png") ;
+    display: flex;
+    flex-direction:column ;
+    justify-content: flex-start;
+    background-size: cover;
+    padding-left: 20px;
+    padding-right:10px ;
+}
+.headingName{
+    font-size: 20px;
+     width: 100%;
+   
+}
+.paraOfBio{
+ width: 100%;    
+}
+.profilePic{
+    width: 40px;
+    height: 40px;
 }
