@@ -1,0 +1,47 @@
+.logoImgSize{
+    width:30px;
+    height:40px;
+    margin-right:10px;
+    margin-top:20px;
+}
+.description{
+    width: 100%;
+}
+.package{
+    display: flex;
+    justify-content: flex-end;
+}
+.para{
+    margin-top: 0px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.brownBg{
+    background-color: #7e858e;
+    padding: 20px;
+    padding-top: 0px;
+    border-radius: 10px;
+    margin-bottom: 14px;
+}
+.flexRow{
+      display: flex;
+      flex-direction: row;
+}
+.middlePart{
+    justify-content: space-between;
+    
+}
+.heading{
+    font-size: 20px;
+    color: #ffffff;
+    width:300px;
+}
+.rating{
+    display: flex;
+   flex-direction:row ;
+   justify-content: flex-start;
+}
+.ratingImg{
+     width:12px;
+    height:12px
+}
