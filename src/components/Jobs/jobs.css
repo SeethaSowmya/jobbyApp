@@ -5,6 +5,16 @@
    justify-content: center;
     align-items: flex-start;
 }
+.searchElement{
+    width:80%;
+    height:20%;
+    margin:5px;
+    background-color: transparent;
+    color:#ffffff;
+}
+.buttons{
+   background-color: #7e858e;
+}
 .leftContainer{
     margin-right: 20px;
     padding-top: 10px;

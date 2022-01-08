@@ -1,9 +1,10 @@
 import {Component} from 'react'
 import Cookies from 'js-cookie'
-
 import Loader from 'react-loader-spinner'
+import {FiSearch} from 'react-icons/fi'
+
+import DisplayDetails from '../Display/display'
 import Header from '../Header/header'
-import JobDetails from '../jobDetails/JobDetails'
 
 import './jobs.css'
 
@@ -31,7 +32,6 @@ const salaryRangesList = [
     salaryRangeId: '40LPA AND ABOVE',
   },
 ]
-
 const employmentTypesList = [
   {
     label: 'Full Time',
@@ -65,10 +65,15 @@ class Jobs extends Component {
     profileDetails: [],
     typeOfEmployment: [],
     salaryRange: [],
+    details: [],
+    activeState: '',
+    apiStatusTwo: apiStatusContainer.initial,
+    userSearchInput: '',
   }
 
   componentDidMount() {
     this.getProfile()
+    this.getJobDetails()
   }
 
   getProfile = async () => {
@@ -91,45 +96,100 @@ class Jobs extends Component {
     }
   }
 
+  updateStatus = () => {
+    const {typeOfEmployment} = this.state
+    const see = typeOfEmployment.map(each => each.employmentTypeId)
+    const temp = see.join(',')
+    console.log(temp)
+    this.setState({activeState: temp})
+  }
+
   checkStatusEmployment = event => {
     const {typeOfEmployment} = this.state
     const stat = typeOfEmployment.map(
       each => each.employmentTypeId === event.target.id,
     )
-    console.log(stat === [])
 
-    if (stat === []) {
+    if (stat.includes(true)) {
       let update = []
       update = typeOfEmployment.filter(
         obj => obj.employmentTypeId !== event.target.id,
       )
-      console.log(update, 'removed')
-      this.setState({typeOfEmployment: update})
+      this.setState(
+        {typeOfEmployment: update},
+        this.updateStatus(),
+        this.getJobDetails(),
+      )
     } else {
-      let upToDate = []
+      const upToDate = []
 
-      upToDate = employmentTypesList.find(
+      const see = employmentTypesList.find(
         random => random.employmentTypeId === event.target.id,
       )
+      upToDate.push(see)
       typeOfEmployment.map(item => upToDate.push(item))
-      console.log(upToDate, 'updated')
-
-      this.setState({typeOfEmployment: upToDate})
+      this.setState(
+        {typeOfEmployment: upToDate},
+        this.updateStatus(),
+        this.getJobDetails(),
+      )
     }
   }
 
   checkStatusSalary = event => {
     const {salaryRange} = this.state
-    const status = salaryRange.includes(event.target.id)
-    if (status) {
+    const stat = salaryRange.map(each => each.salaryRangeId === event.target.id)
+    if (stat.includes(true)) {
       let update = []
-      update = salaryRange.filter(each => each !== event.target.id)
-      console.log(update, 'updated')
+      update = salaryRange.filter(obj => obj.salaryRangeId !== event.target.id)
+      console.log(update, 'removed')
       this.setState({salaryRange: update})
     } else {
-      salaryRange.push(event.target.id)
+      const upToDate = []
+
+      const see = salaryRangesList.find(
+        random => random.salaryRangeId === event.target.id,
+      )
+      upToDate.push(see)
+      salaryRange.map(item => upToDate.push(item))
+      console.log(upToDate, 'updated')
+
+      this.setState({salaryRange: upToDate})
     }
-    console.log(salaryRange)
+  }
+
+  getJobDetails = async () => {
+    // const jwt = Cookies.get('jwt_token')
+    const {activeState, userSearchInput} = this.state
+    const optionsTwo = {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+      method: 'GET',
+    }
+    const apiUrlT = `https://apis.ccbp.in/jobs?employment_type=${activeState}&minimum_package=1000000&search=${userSearchInput}`
+
+    const responseT = await fetch(apiUrlT, optionsTwo)
+    const dataT = await responseT.json()
+    console.log(dataT)
+    if (responseT.ok === true) {
+      const update = dataT.jobs.map(each => ({
+        companyLogoUrl: each.company_logo_url,
+        employmentType: each.employment_type,
+        jobDescription: each.job_description,
+        location: each.location,
+        packagePerAnnum: each.package_per_annum,
+        rating: each.rating,
+        title: each.title,
+        id: each.id,
+      }))
+      this.setState({
+        apiStatusTwo: apiStatusContainer.success,
+        details: update,
+      })
+    } else {
+      this.setState({apiStatusTwo: apiStatusContainer.failure})
+    }
   }
 
   onSuccessView = () => {
@@ -208,15 +268,60 @@ class Jobs extends Component {
     }
   }
 
+  onChangeSearch = event => {
+    this.setState({userSearchInput: event.target.value})
+  }
+
+  onClickingSearch = () => {
+    this.getJobDetails()
+  }
+
+  onSuccessViewTwo = () => {
+    const {details, userSearchInput} = this.state
+    return (
+      <>
+        <div>
+          <input
+            placeholder="Search"
+            className="searchElement"
+            value={userSearchInput}
+            type="search"
+            onChange={this.onChangeSearch}
+          />
+          <button type="button" onClick={this.onClickingSearch}>
+            <FiSearch />
+          </button>
+        </div>
+        {details.map(each => (
+          <DisplayDetails list={each} key={each.id} />
+        ))}
+      </>
+    )
+  }
+
+  switchStatusTwo = () => {
+    const {apiStatusTwo} = this.state
+    switch (apiStatusTwo) {
+      case apiStatusContainer.inProgress:
+        return this.loaderCode()
+      case apiStatusContainer.success:
+        return this.onSuccessViewTwo()
+      case apiStatusContainer.failure:
+        return this.onFailureView()
+      default:
+        return null
+    }
+  }
+
   render() {
+    const {activeState} = this.state
+    console.log(activeState, 'activeState')
     return (
       <div>
         <Header />
         <div className="container">
           <div className="leftContainer">{this.switchStatus()}</div>
-          <div className="rightContainer">
-            <JobDetails />
-          </div>
+          <div className="rightContainer">{this.switchStatusTwo()}</div>
         </div>
       </div>
     )

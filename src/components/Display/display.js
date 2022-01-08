@@ -12,7 +12,9 @@ const DisplayDetails = props => {
     location,
     companyLogoUrl,
     jobDescription,
+    id,
   } = list
+  console.log(id)
 
   return (
     <div className="brownBg">
