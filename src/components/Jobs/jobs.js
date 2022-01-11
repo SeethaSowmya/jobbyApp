@@ -77,7 +77,7 @@ class Jobs extends Component {
   }
 
   getProfile = async () => {
-    const apiUrl = 'https://apis.ccb.in/profile'
+    const apiUrl = 'https://apis.ccbp.in/profile'
     const response = await fetch(apiUrl, options)
     const data = await response.json()
     const details = data.profile_details
@@ -231,11 +231,14 @@ class Jobs extends Component {
   }
 
   onFailureView = () => (
-    <div>
+    <div className="failurePage">
       <img
         src="https://assets.ccbp.in/frontend/react-js/failure-img.png"
         alt="failure view"
       />
+      <h1 className="whiteHeading">Oops! Something Went Wrong</h1>
+      <p>We cannot seem to find the page you are looking for.</p>
+      {this.retryButton()}
     </div>
   )
 

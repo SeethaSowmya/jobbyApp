@@ -24,12 +24,17 @@ class JobItemDetails extends Component {
     this.getProfile()
   }
 
-  onFailureView = () => (
-    <div>
+  onFailureViewTwo = () => (
+    <div className="failurePage">
       <img
         src="https://assets.ccbp.in/frontend/react-js/failure-img.png"
         alt="failure view"
       />
+      <h1 className="whiteHeading">Oops! Something Went Wrong</h1>
+      <p>We cannot seem to find the page you are looking for.</p>
+      <button type="button" className="retry" onClick={this.getProfile}>
+        Retry
+      </button>
     </div>
   )
 
@@ -44,7 +49,7 @@ class JobItemDetails extends Component {
     return (
       <ul className="skillContainer">
         {skillsListDetails.map(each => (
-          <li className="skillSubContainer">
+          <li id={`${each.skillsName}`} className="skillSubContainer">
             <img
               src={each.skillsImageUrl}
               alt={`${each.skillsName}`}
@@ -136,9 +141,10 @@ class JobItemDetails extends Component {
           {this.company()}
         </div>
         <h1 className="heading">Similar Jobs</h1>
-        <div className="bg">
+
+        <ul className="bg">
           {similarJobsListDetails.map(each => (
-            <div className="brownBg2">
+            <li id={`${each.title}`} className="brownBg2">
               <div className="flexRow">
                 <img
                   src={each.companyLogoUrl}
@@ -165,14 +171,15 @@ class JobItemDetails extends Component {
                 <MdWork />
                 <p className="para">{employmentType}</p>
               </div>
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     )
   }
 
   getProfile = async () => {
+    this.setState({status: apiStatusContainer.inProgress})
     const {match} = this.props
     const {params} = match
     const {id} = params
@@ -188,7 +195,6 @@ class JobItemDetails extends Component {
     const response = await fetch(apiUrl, options)
 
     if (response.ok === true) {
-      this.setState({status: apiStatusContainer.success})
       const data = await response.json()
       const updateTheData = {
         companyLogoUrl: data.job_details.company_logo_url,
@@ -230,6 +236,7 @@ class JobItemDetails extends Component {
         skillsListDetails,
         lifeCompanyListDetails,
         similarJobsListDetails,
+        status: apiStatusContainer.success,
       })
     } else {
       this.setState({status: apiStatusContainer.failure})
@@ -244,7 +251,7 @@ class JobItemDetails extends Component {
       case apiStatusContainer.success:
         return this.view()
       case apiStatusContainer.failure:
-        return this.onFailureView()
+        return this.onFailureViewTwo()
       default:
         return null
     }

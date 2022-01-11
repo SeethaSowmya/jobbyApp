@@ -6,8 +6,19 @@ flex-wrap: wrap;
 list-style-type: none;
 padding-left: 0px;
 }
+.whiteHeading{
+    color: #ffffff;
+    font-size: 18px;
+}
+.failurePage{
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;    
+}
 .bg{
-
+    list-style-type: none;
+    padding-left: 0px;
     border-radius: 10px;
     margin-bottom: 14px;;
     display: flex;
