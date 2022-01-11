@@ -3,8 +3,8 @@ import Cookies from 'js-cookie'
 import Loader from 'react-loader-spinner'
 import {FiSearch} from 'react-icons/fi'
 
-import DisplayDetails from '../Display/display'
 import Header from '../Header/header'
+import DisplayDetails from '../Display/display'
 
 import './jobs.css'
 
@@ -77,7 +77,7 @@ class Jobs extends Component {
   }
 
   getProfile = async () => {
-    const apiUrl = 'https://apis.ccbp.in/profile'
+    const apiUrl = 'https://apis.ccb.in/profile'
     const response = await fetch(apiUrl, options)
     const data = await response.json()
     const details = data.profile_details
@@ -92,6 +92,7 @@ class Jobs extends Component {
         profileDetails: pDetails,
       })
     } else {
+      console.log('onfffff')
       this.setState({apiStatus: apiStatusContainer.failure})
     }
   }
@@ -101,7 +102,7 @@ class Jobs extends Component {
     const see = typeOfEmployment.map(each => each.employmentTypeId)
     const temp = see.join(',')
     console.log(temp)
-    this.setState({activeState: temp})
+    this.setState({activeState: temp}, this.getJobDetails)
   }
 
   checkStatusEmployment = event => {
@@ -115,11 +116,7 @@ class Jobs extends Component {
       update = typeOfEmployment.filter(
         obj => obj.employmentTypeId !== event.target.id,
       )
-      this.setState(
-        {typeOfEmployment: update},
-        this.updateStatus(),
-        this.getJobDetails(),
-      )
+      this.setState({typeOfEmployment: update}, this.updateStatus)
     } else {
       const upToDate = []
 
@@ -128,11 +125,7 @@ class Jobs extends Component {
       )
       upToDate.push(see)
       typeOfEmployment.map(item => upToDate.push(item))
-      this.setState(
-        {typeOfEmployment: upToDate},
-        this.updateStatus(),
-        this.getJobDetails(),
-      )
+      this.setState({typeOfEmployment: upToDate}, this.updateStatus)
     }
   }
 
@@ -252,7 +245,14 @@ class Jobs extends Component {
     </div>
   )
 
-  retryButton = () => <button type="button">Retry</button>
+  retryButton = () => {
+    console.log('retry  called')
+    return (
+      <button type="button" className="retry" onClick={this.getProfile}>
+        Retry
+      </button>
+    )
+  }
 
   switchStatus = () => {
     const {apiStatus} = this.state
@@ -262,7 +262,7 @@ class Jobs extends Component {
       case apiStatusContainer.success:
         return this.onSuccessView()
       case apiStatusContainer.failure:
-        return this.onFailureView()
+        return this.retryButton()
       default:
         return null
     }
@@ -293,7 +293,7 @@ class Jobs extends Component {
           </button>
         </div>
         {details.map(each => (
-          <DisplayDetails list={each} key={each.id} />
+          <DisplayDetails list={each} key={each.id} idd={each.id} />
         ))}
       </>
     )
@@ -314,8 +314,6 @@ class Jobs extends Component {
   }
 
   render() {
-    const {activeState} = this.state
-    console.log(activeState, 'activeState')
     return (
       <div>
         <Header />

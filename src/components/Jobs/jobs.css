@@ -12,6 +12,12 @@
     background-color: transparent;
     color:#ffffff;
 }
+.retry{
+    background-color: blue;
+    color: #ffffff;
+ padding:20px;
+ border-width: 0px;
+}
 .buttons{
    background-color: #7e858e;
 }
