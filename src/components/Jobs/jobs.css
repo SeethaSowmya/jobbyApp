@@ -18,6 +18,10 @@
  padding:20px;
  border-width: 0px;
 }
+.unOrderList{
+    list-style-type: none;
+    padding-left: 0px;
+}
 .buttons{
    background-color: #7e858e;
 }

@@ -1,7 +1,6 @@
 .weblogo{
-     height:20px;
-     width:30%; 
-     padding-top: 3px;
+     height:100%;
+     width:40%; 
      margin-bottom: 0px;
 }
 .headerContainer{
@@ -17,6 +16,16 @@
     justify-content: center;
     padding-left: 0px;
     list-style-type: none;
+    margin-top: 1%;
+    margin-bottom: 0px;
+ padding-bottom: 5px; 
+  text-decoration: none;   
+    
+}
+.linkElement{
+   text-decoration: none;
+    padding: 0px;
+    margin: 0px;
 }
 li{
     margin-left: 10px;
@@ -28,4 +37,6 @@ li{
     background-color:  #4f46e5;
     border-radius: 10px;
     color:white;
+    margin: 0px;
+    cursor: pointer;
 }

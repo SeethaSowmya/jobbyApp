@@ -15,7 +15,7 @@ const DisplayDetails = props => {
   } = list
 
   return (
-    <Link to={`/jobs/${idd}`}>
+    <Link to={`/jobs/${idd}`} className="textdecor">
       <div className="brownBg">
         <div className="flexRow">
           <img src={companyLogoUrl} alt={title} className="logoImgSize" />

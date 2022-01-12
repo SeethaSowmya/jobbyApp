@@ -144,7 +144,7 @@ class JobItemDetails extends Component {
 
         <ul className="bg">
           {similarJobsListDetails.map(each => (
-            <li id={`${each.title}`} className="brownBg2">
+            <li id={`${each.employmentType}`} className="brownBg2">
               <div className="flexRow">
                 <img
                   src={each.companyLogoUrl}

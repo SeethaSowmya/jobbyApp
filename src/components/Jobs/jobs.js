@@ -64,9 +64,9 @@ class Jobs extends Component {
     apiStatus: apiStatusContainer.initial,
     profileDetails: [],
     typeOfEmployment: [],
-    salaryRange: [],
     details: [],
     activeState: '',
+    activeStateTwo: '',
     apiStatusTwo: apiStatusContainer.initial,
     userSearchInput: '',
   }
@@ -92,7 +92,6 @@ class Jobs extends Component {
         profileDetails: pDetails,
       })
     } else {
-      console.log('onfffff')
       this.setState({apiStatus: apiStatusContainer.failure})
     }
   }
@@ -129,38 +128,39 @@ class Jobs extends Component {
     }
   }
 
-  checkStatusSalary = event => {
-    const {salaryRange} = this.state
-    const stat = salaryRange.map(each => each.salaryRangeId === event.target.id)
-    if (stat.includes(true)) {
-      let update = []
-      update = salaryRange.filter(obj => obj.salaryRangeId !== event.target.id)
-      console.log(update, 'removed')
-      this.setState({salaryRange: update})
-    } else {
-      const upToDate = []
+  values = id => {
+    switch (id) {
+      case '10LPA AND ABOVE':
+        return '1000000'
 
-      const see = salaryRangesList.find(
-        random => random.salaryRangeId === event.target.id,
-      )
-      upToDate.push(see)
-      salaryRange.map(item => upToDate.push(item))
-      console.log(upToDate, 'updated')
+      case '20LPA AND ABOVE':
+        return '2000000'
+      case '30LPA AND ABOVE':
+        return '3000000'
 
-      this.setState({salaryRange: upToDate})
+      case '40LPA AND ABOVE':
+        return '4000000'
+      default:
+        return null
     }
+  }
+
+  checkStatusSalary = event => {
+    const element = this.values(event.target.id)
+    this.setState({activeStateTwo: element}, this.getJobDetails)
   }
 
   getJobDetails = async () => {
     // const jwt = Cookies.get('jwt_token')
-    const {activeState, userSearchInput} = this.state
+    const {activeState, activeStateTwo, userSearchInput} = this.state
+    console.log(activeStateTwo)
     const optionsTwo = {
       headers: {
         Authorization: `Bearer ${jwt}`,
       },
       method: 'GET',
     }
-    const apiUrlT = `https://apis.ccbp.in/jobs?employment_type=${activeState}&minimum_package=1000000&search=${userSearchInput}`
+    const apiUrlT = `https://apis.ccbp.in/jobs?employment_type=${activeState}&minimum_package=${activeStateTwo}&search=${userSearchInput}`
 
     const responseT = await fetch(apiUrlT, optionsTwo)
     const dataT = await responseT.json()
@@ -196,10 +196,10 @@ class Jobs extends Component {
           <p className="paraOfBio">{shortBio}</p>
         </div>
         <hr />
-        <div>
+        <ul className="unOrderList">
           <h1 className="whiteHead">Type of Employment</h1>
           {employmentTypesList.map(each => (
-            <div>
+            <li>
               <input
                 onChange={this.checkStatusEmployment}
                 type="checkBox"
@@ -208,23 +208,26 @@ class Jobs extends Component {
               <label className="whiteHead" htmlFor={each.employmentTypeId}>
                 {each.label}
               </label>
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
         <div>
           <h1 className="whiteHead">Salary Range</h1>
-          {salaryRangesList.map(eachItem => (
-            <div>
-              <input
-                type="checkBox"
-                onChange={this.checkStatusSalary}
-                id={eachItem.salaryRangeId}
-              />
-              <label className="whiteHead" htmlFor={eachItem.salaryRangeId}>
-                {eachItem.label}
-              </label>
-            </div>
-          ))}
+          <ul className="unOrderList">
+            {salaryRangesList.map(eachItem => (
+              <li>
+                <input
+                  type="radio"
+                  name="salary"
+                  onChange={this.checkStatusSalary}
+                  id={eachItem.salaryRangeId}
+                />
+                <label className="whiteHead" htmlFor={eachItem.salaryRangeId}>
+                  {eachItem.label}
+                </label>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     )
@@ -281,6 +284,13 @@ class Jobs extends Component {
 
   onSuccessViewTwo = () => {
     const {details, userSearchInput} = this.state
+    let statusOfDetails
+    console.log(details, 'details')
+    if (details.length === 0) {
+      statusOfDetails = true
+    } else {
+      statusOfDetails = false
+    }
     return (
       <>
         <div>
@@ -291,13 +301,28 @@ class Jobs extends Component {
             type="search"
             onChange={this.onChangeSearch}
           />
-          <button type="button" onClick={this.onClickingSearch}>
+          <button
+            type="button"
+            testid="searchButton"
+            onClick={this.onClickingSearch}
+          >
             <FiSearch />
           </button>
         </div>
-        {details.map(each => (
-          <DisplayDetails list={each} key={each.id} idd={each.id} />
-        ))}
+        {!statusOfDetails &&
+          details.map(each => (
+            <DisplayDetails list={each} key={each.id} idd={each.id} />
+          ))}
+        {statusOfDetails && (
+          <div className="failurePage">
+            <img
+              src="https://assets.ccbp.in/frontend/react-js/no-jobs-img.png"
+              alt="no jobs"
+            />
+            <h1 className="heading">No Jobs Found</h1>
+            <p className="para">We could not find any jobs.Try other filters</p>
+          </div>
+        )}
       </>
     )
   }
