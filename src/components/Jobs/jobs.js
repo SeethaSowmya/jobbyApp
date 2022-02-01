@@ -51,14 +51,6 @@ const employmentTypesList = [
   },
 ]
 
-const jwt = Cookies.get('jwt_token')
-const options = {
-  headers: {
-    Authorization: `Bearer ${jwt}`,
-  },
-  method: 'GET',
-}
-
 class Jobs extends Component {
   state = {
     apiStatus: apiStatusContainer.initial,
@@ -77,6 +69,13 @@ class Jobs extends Component {
   }
 
   getProfile = async () => {
+    const jwt = Cookies.get('jwt_token')
+    const options = {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+      method: 'GET',
+    }
     const apiUrl = 'https://apis.ccbp.in/profile'
     const response = await fetch(apiUrl, options)
     const data = await response.json()
@@ -152,6 +151,8 @@ class Jobs extends Component {
 
   getJobDetails = async () => {
     // const jwt = Cookies.get('jwt_token')
+    this.setState({apiStatus: apiStatusContainer.inProgress})
+    const jwt = Cookies.get('jwt_token')
     const {activeState, activeStateTwo, userSearchInput} = this.state
     console.log(activeStateTwo)
     const optionsTwo = {
@@ -199,7 +200,7 @@ class Jobs extends Component {
         <ul className="unOrderList">
           <h1 className="whiteHead">Type of Employment</h1>
           {employmentTypesList.map(each => (
-            <li>
+            <li key={each.employmentTypeId}>
               <input
                 onChange={this.checkStatusEmployment}
                 type="checkBox"
@@ -215,14 +216,18 @@ class Jobs extends Component {
           <h1 className="whiteHead">Salary Range</h1>
           <ul className="unOrderList">
             {salaryRangesList.map(eachItem => (
-              <li>
+              <li key={eachItem.salaryRangeId}>
                 <input
                   type="radio"
                   name="salary"
                   onChange={this.checkStatusSalary}
                   id={eachItem.salaryRangeId}
                 />
-                <label className="whiteHead" htmlFor={eachItem.salaryRangeId}>
+                <label
+                  className="whiteHead"
+                  key={eachItem.label}
+                  htmlFor={eachItem.salaryRangeId}
+                >
                   {eachItem.label}
                 </label>
               </li>
@@ -241,7 +246,9 @@ class Jobs extends Component {
       />
       <h1 className="whiteHeading">Oops! Something Went Wrong</h1>
       <p>We cannot seem to find the page you are looking for.</p>
-      {this.retryButton()}
+      <button type="button" className="retry" onClick={this.getJobDetails}>
+        Retry
+      </button>
     </div>
   )
 
@@ -320,7 +327,9 @@ class Jobs extends Component {
               alt="no jobs"
             />
             <h1 className="heading">No Jobs Found</h1>
-            <p className="para">We could not find any jobs.Try other filters</p>
+            <p className="para">
+              We could not find any jobs. Try other filters
+            </p>
           </div>
         )}
       </>

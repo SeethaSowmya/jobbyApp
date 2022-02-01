@@ -18,7 +18,11 @@ const DisplayDetails = props => {
     <Link to={`/jobs/${idd}`} className="textdecor">
       <div className="brownBg">
         <div className="flexRow">
-          <img src={companyLogoUrl} alt={title} className="logoImgSize" />
+          <img
+            src={companyLogoUrl}
+            alt="similar job company logo"
+            className="logoImgSize"
+          />
           <div>
             <h1 className="heading">{title}</h1>
             <div className="rating">

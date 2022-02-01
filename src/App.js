@@ -2,13 +2,11 @@ import './App.css'
 import {Route, Switch} from 'react-router-dom'
 import LoginForm from './components/LoginForm/Login'
 import Home from './components/Home/home'
-import ProtectedRoute from './components/ProtectedRoute/protectedRoute'
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute'
 import NotFound from './components/NotFound/NotFound'
 import Jobs from './components/Jobs/jobs'
 import JobItemDetails from './components/JabItemDetails/JobItemDetails'
-// These are the lists used in the application. You can move them to any component needed.
 
-// Replace your code here
 const App = () => (
   <>
     <Switch>

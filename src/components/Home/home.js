@@ -11,7 +11,7 @@ const Home = () => (
         Millions of people are searching for jobs,salary information company
         reviews.Find the fits your abilities and potential.
       </p>
-      <Link to="/Jobs/">
+      <Link to="/jobs/">
         <button type="button" className="findJobsBtn">
           Find Jobs
         </button>
@@ -19,5 +19,4 @@ const Home = () => (
     </div>
   </div>
 )
-
 export default Home

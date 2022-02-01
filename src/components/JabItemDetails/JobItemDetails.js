@@ -3,6 +3,7 @@ import {Component} from 'react'
 import Cookies from 'js-cookie'
 import {MdLocationOn, MdWork} from 'react-icons/md'
 import Loader from 'react-loader-spinner'
+import Header from '../Header/header'
 
 const apiStatusContainer = {
   initial: 'INITIAL',
@@ -72,7 +73,7 @@ class JobItemDetails extends Component {
           <p>{lifeCompanyListDetails.description}</p>
           <img
             src={lifeCompanyListDetails.imageUrl}
-            alt="description"
+            alt="life at company"
             className="companyImg"
           />
         </div>
@@ -148,7 +149,7 @@ class JobItemDetails extends Component {
               <div className="flexRow">
                 <img
                   src={each.companyLogoUrl}
-                  alt="similar job company logo"
+                  alt="company logo"
                   className="logoImgSize"
                 />
                 <div>
@@ -258,7 +259,12 @@ class JobItemDetails extends Component {
   }
 
   render() {
-    return this.switchStatus()
+    return (
+      <>
+        <Header />
+        {this.switchStatus()}
+      </>
+    )
   }
 }
 
