@@ -70,6 +70,7 @@ class Jobs extends Component {
 
   getProfile = async () => {
     const jwt = Cookies.get('jwt_token')
+    this.setState({apiStatus: apiStatusContainer.inProgress})
     const options = {
       headers: {
         Authorization: `Bearer ${jwt}`,
@@ -108,6 +109,7 @@ class Jobs extends Component {
     const stat = typeOfEmployment.map(
       each => each.employmentTypeId === event.target.id,
     )
+    console.log(stat, 'stat')
 
     if (stat.includes(true)) {
       let update = []
@@ -151,7 +153,8 @@ class Jobs extends Component {
 
   getJobDetails = async () => {
     // const jwt = Cookies.get('jwt_token')
-    this.setState({apiStatus: apiStatusContainer.inProgress})
+    this.setState({apiStatusTwo: apiStatusContainer.inProgress})
+
     const jwt = Cookies.get('jwt_token')
     const {activeState, activeStateTwo, userSearchInput} = this.state
     console.log(activeStateTwo)
